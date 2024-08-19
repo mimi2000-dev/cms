@@ -1,0 +1,46 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+    Services
+{% endblock %}
+
+{% block main %}
+ 
+    
+
+
+    <div class="content-wrapper">
+        <div class="page-header">
+        <h3 class="page-title">Service</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Service</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        {% for s in services %}
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-9">
+                  <div class="d-flex align-items-center align-self-start">
+                    <h3 class="mb-0">{{s.name}}</h3>
+                  </div>
+                </div>
+               
+              </div>
+              <h6 class="text-muted font-weight-normal">{{s.description}}</h6>
+              <p class="text-success  mb-0 font-weight-medium">{{s.updated}}</p>
+
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      
+      </div>
+
+
+{% endblock %}
