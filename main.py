@@ -100,13 +100,18 @@ def services_request_form():
     if request.method == 'POST':
         service = request.form['service']
         pdf_file = request.files['pdf_file']
+        nrc_number = request.form['nrc_number']
+        district = request.form['district']
         file = pdf_file.read()
         file_name = pdf_file.filename
         reason = request.form['reason']
         # print('--------------------',type(service))
         srf = ServiceRequestForm(
             service_id=int(service),
-            reason=reason,pdf_file=file,
+            reason=reason,
+            nrc_number=nrc_number,
+            district=district,
+            pdf_file=file,
             file_name=file_name, 
             client=me.id,
         )
