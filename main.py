@@ -189,5 +189,3 @@ def  policy():
 def handle_db_error(e):
     print(str(e.__dict__))
     return "An error occurred while processing your request.", 500
-
- 
