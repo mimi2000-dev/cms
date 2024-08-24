@@ -8,6 +8,25 @@ from .models import *
 
 auth = Blueprint('auth', __name__)
 
+
+@auth.route('/admin/', methods=('POST', 'GET'))
+def admin():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email, role=UserStatusEnum.admin).first()
+
+        if not user or not check_password_hash(user.password, password):
+            flash('Invalid credentials provided. Please check your login details and try again.')
+            return redirect(url_for('auth.admin'))
+        
+        login_user(user)
+        return redirect(url_for('dashboard'))  # Change to your admin dashboard route
+    
+    return render_template('auth/admin_login.html')
+
+
+
 @auth.route('/login/',methods=('POST','GET'))
 def login():
     if request.method == 'POST':
