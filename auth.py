@@ -21,7 +21,7 @@ def admin():
             return redirect(url_for('auth.admin'))
         
         login_user(user)
-        return redirect(url_for('dashboard'))  # Change to your admin dashboard route
+        return redirect(url_for('main.dashboard'))  # Change to your admin dashboard route
     
     return render_template('auth/admin_login.html')
 
