@@ -82,6 +82,41 @@ def create_services():
         'dashboard/create_service.html',
         me=me,                        
     )
+    
+@main.route('/dashboard/services/delete/<int:id>/', methods=['POST'])
+@login_required
+def delete_service(id):
+    service = Service.query.get_or_404(id)
+    if service.author != current_user.id:
+        flash('You do not have permission to delete this service.')
+        return redirect(url_for('main.services'))
+    
+    database.session.delete(service)
+    database.session.commit()
+    flash(f'Service {service.name} has been deleted.')
+    return redirect(url_for('main.services'))
+
+@main.route('/dashboard/services/update/<int:id>/', methods=['POST', 'GET'])
+@login_required
+def update_service(id):
+    service = Service.query.get_or_404(id)
+    if service.author != current_user.id:
+        flash('You do not have permission to update this service.')
+        return redirect(url_for('main.services'))
+
+    if request.method == 'POST':
+        service.name = request.form['name']
+        service.description = request.form['description']
+        database.session.commit()
+        flash(f'Service {service.name} has been updated.')
+        return redirect(url_for('main.services'))
+
+    return render_template(
+        'dashboard/update_service.html',
+        service=service,
+        me=current_user
+    )
+
 
 @main.route('/dashboard/clients/')
 @login_required
@@ -182,6 +217,8 @@ def disapprove_service_request(request_id):
     else:
         flash(f'Service request form not found') 
     return redirect(url_for('main.service_request'))
+
+
  
 @main.route('/dashboard/privacy-policy/')
 @login_required

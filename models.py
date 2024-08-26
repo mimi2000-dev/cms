@@ -63,4 +63,4 @@ class ServiceRequestForm(database.Model):
     def get_status_text(self):
         if self.active:
             return 'Approved'
-        return 'Not Approved'
+        return 'Declined'

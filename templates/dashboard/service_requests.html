@@ -21,7 +21,7 @@
         <div class="col-lg-4 mx-auto stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Create Service Form</h4>
+                <h4 class="card-title">Apply for a Service</h4>
                 <p class="card-description">Fill in all the fields to create a service. </p>
                 <form class="forms-sample" action="/dashboard/service/request/" method="post" enctype="multipart/form-data">
                     <div class="form-group">
@@ -60,127 +60,74 @@
         <div class=" {% if me.role.value == 'admin' %}  col-lg-12 {% else %}  col-lg-8 {% endif %}grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Service Request Forms</h4>
+                <h4 class="card-title">Service Request</h4>
                 </p>
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
-                      <tr>
-                        {% if me.role.value == 'admin' %}
+                        <tr>
+                            {% if me.role.value == 'admin' %}
                             <th>Clients</th>
-                        {% endif %} 
-    
-                        <th>Service</th>
-                        <th>file</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        {% if me.role.value == 'admin' %}
-                        <th>Action</th>
-                        {% endif %}
-                      </tr>
+                            {% endif %}
+                            <th>Service</th>
+                            <th>File</th>
+                            <th>Reason</th>
+                            <th>District</th>
+                            <th>NRC</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            {% if me.role.value == 'admin' %}
+                            <th>Action</th>
+                            {% endif %}
+                        </tr>
                     </thead>
-                    {% if me.role.value == 'admin' %}
-                    <tbody>
-                      {% for request in servicerequest %}
-                      <tr>
-                       
-                         <td>{{ request.user.email }}</td>
-                        
-                          <td>{{ request.service.name }}</td>
-                          <td> 
-                            {% if request.pdf_file %}
-                            <a href="{{ url_for('main.download_file', request_id=request.id) }}" class="btn btn-primary">Download File</a>
-                            {% else %}
-                            No File
-                            {% endif %}
-                          </td>
-                          <td>{{ request.reason }}</td>
-    
-                          <td><label class=" badge
-                            {% if request.get_status() %}
-                            badge-success
-                            {% else %}
-                            badge-warning
-    
-                            {% endif %}
-                          ">{{request.get_status_text()}}</label></td>
-                          <td>{{ request.updated }}</td>
-                        
-                          <td>
-                            {% if request.get_status() %}
-                            <button type="button" class="btn btn-danger disapprove-btn" data-request-id="{{ request.id }}">
-                              <i class="mdi mdi-close-circle text-white"></i>
-                              </button>
-                            {% else %}
-    
-                            <button type="button" class="btn btn-success approve-btn" data-request-id="{{ request.id }}">
-                              <i class="mdi mdi-check-circle text-white"></i>
-                            </button>
-                              
-                            <a class="btn btn-danger ms-2" href="mailto:{{ request.user.email }}?subject=Declined%20of%20service%20request%20{{ request.service.name }}">Decline</a>
-
-
-                            {% endif %}
-                            
-    
-                          </td>
-                         
-                      </tr>
-                      {% endfor %}
-                      
-                    </tbody>
-                    {% endif %}
-                    {% if me.role.value == 'client' %}
-                    
                     <tbody>
                         {% for request in servicerequest %}
                         <tr>
-                          {% if me.role.value == 'admin' %}
-                          <td>{{ request.user.email }}</td>
-                          {% endif %} 
+                            {% if me.role.value == 'admin' %}
+                            <td>{{ request.user.email }}</td>
+                            {% endif %}
                             <td>{{ request.service.name }}</td>
-                            <td> 
-                              {% if request.pdf_file %}
-                              <a href="{{ url_for('main.download_file', request_id=request.id) }}" class="btn btn-primary">Download File</a>
-                              {% else %}
-                              No File
-                              {% endif %}
+                            <td>
+                                {% if request.pdf_file %}
+                                <a href="{{ url_for('main.download_file', request_id=request.id) }}" class="btn btn-primary">Download File</a>
+                                {% else %}
+                                No File
+                                {% endif %}
                             </td>
                             <td>{{ request.reason }}</td>
-      
-                            <td><label class=" badge
-                              {% if request.get_status() %}
-                              badge-success
-                              {% else %}
-                              badge-warning
-      
-                              {% endif %}
-                            ">{{request.get_status_text()}}</label></td>
+                            <td>{{ request.district }}</td>
+                            <td>{{ request.nrc_number }}</td>
+                            <td>
+                                <label class="badge
+                                {% if request.get_status() %}
+                                badge-success
+                                {% else %}
+                                badge-warning
+                                {% endif %}
+                                ">{{request.get_status_text()}}</label>
+                            </td>
                             <td>{{ request.updated }}</td>
                             {% if me.role.value == 'admin' %}
                             <td>
-                              {% if request.get_status() %}
-                              <button type="button" class="btn btn-danger disapprove-btn" data-request-id="{{ request.id }}">
-                                <i class="mdi mdi-close-circle text-white"></i>
+                                {% if request.get_status() %}
+                                <button type="button" class="btn btn-danger disapprove-btn" data-request-id="{{ request.id }}">
+                                    <i class="mdi mdi-close-circle text-white"></i>
                                 </button>
-                              {% else %}
-      
-                              <button type="button" class="btn btn-success approve-btn" data-request-id="{{ request.id }}">
-                                <i class="mdi mdi-check-circle text-white"></i>
+                                {% else %}
+                                <button type="button" class="btn btn-success approve-btn" data-request-id="{{ request.id }}">
+                                    <i class="mdi mdi-check-circle text-white"></i>
                                 </button>
-                              {% endif %}
-                              
-      
+                                <button type="button" class="btn btn-danger decline-btn" data-request-id="{{ request.id }}">
+                                    Decline
+                                </button>
+                                {% endif %}
                             </td>
                             {% endif %}
                         </tr>
                         {% endfor %}
-                        
                     </tbody>
-                    {% endif %}
-                  
-                  </table>
+                </table>
                 </div>
               </div>
             </div>
@@ -237,6 +184,29 @@
                 });
             });
         });
+
+        document.querySelectorAll('.decline-btn').forEach(button => {
+          button.addEventListener('click', () => {
+              const requestId = button.dataset.requestId;
+              fetch(`/disapprove_service_request/${requestId}`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+              })
+              .then(response => {
+                  if (response.ok) {
+                      // Reload the page or update UI as needed
+                      location.reload();
+                  } else {
+                      console.error('Failed to update status');
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+              });
+          });
+      });
     </script>
     
 {% endblock %}
